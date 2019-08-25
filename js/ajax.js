@@ -1,14 +1,13 @@
 var point = 0;
 var diagnosis_score = 0;
-$(function(){
-	$('#cta').on('click', function(){	
+var ailments = [];
+$(function () {
+	$('#cta').on('click', function () {
 
-		if(window.XMLHttpRequest)
-		{
-			xmlhttp = new window.XMLHttpRequest(); 
+		if (window.XMLHttpRequest) {
+			xmlhttp = new window.XMLHttpRequest();
 		}
-		else
-		{
+		else {
 			xmlhttp = new ActiveXObject('Microsoft.XMLHTTP');
 		}
 
@@ -16,31 +15,28 @@ $(function(){
 		xmlhttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
 		xmlhttp.send();
 
-		xmlhttp.onreadystatechange = function() {
-			if(xmlhttp.readyState == '4' && xmlhttp.status == '200')
-			{
+		xmlhttp.onreadystatechange = function () {
+			if (xmlhttp.readyState == '4' && xmlhttp.status == '200') {
 				response = xmlhttp.responseText;
 				$('#ul-symptoms').html(response);
 				$('#ul-symptoms').children(':first-child').fadeIn(1000).siblings().addClass("hide");
 				$('#cta').addClass("hide");
-				$('#yes').addClass( "show" ).removeClass( "hide" );
-				$('#no').addClass( "show" ).removeClass( "hide" );
-				$('#next').addClass( "show" ).removeClass( "hide" );
+				$('#yes').addClass("show").removeClass("hide");
+				$('#no').addClass("show").removeClass("hide");
+				$('#next').addClass("show").removeClass("hide");
 				$('#btn-result').addClass("hide").removeClass("show");
 				$('#symptoms-wrapper').fadeIn(1000);
 			}
-			
+
 		}
 	});
 
-	$('#view-symptom').on('click', function(){	
+	$('#view-symptom').on('click', function () {
 
-		if(window.XMLHttpRequest)
-		{
-			xmlhttp = new window.XMLHttpRequest(); 
+		if (window.XMLHttpRequest) {
+			xmlhttp = new window.XMLHttpRequest();
 		}
-		else
-		{
+		else {
 			xmlhttp = new ActiveXObject('Microsoft.XMLHTTP');
 		}
 
@@ -48,29 +44,28 @@ $(function(){
 		xmlhttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
 		xmlhttp.send();
 
-		xmlhttp.onreadystatechange = function() {
-			if(xmlhttp.readyState == '4' && xmlhttp.status == '200')
-			{
+		xmlhttp.onreadystatechange = function () {
+			if (xmlhttp.readyState == '4' && xmlhttp.status == '200') {
 				response = xmlhttp.responseText;
 				$('#ul-view-symptoms').html(response);
 				$('#div-view-symptoms').removeClass("hide").addClass('show').siblings().addClass("hide");
 				$('#a-home').removeClass("hide").addClass('show');
 			}
-			
+
 		}
 	});
 
-	$('#submit-symptom').on("click",function(e){
+	$('#submit-symptom').on("click", function (e) {
 		var symptom = $('#txt-symptom').val();
 		$('#txt-symptom').val('');
 
-		if(window.XMLHttpRequest){
-			xmlhttp = new window.XMLHttpRequest ();
-		} else{
+		if (window.XMLHttpRequest) {
+			xmlhttp = new window.XMLHttpRequest();
+		} else {
 			xmlhttp = new ActiveXObject('Microsoft.XMLHTTP');
 		}
 
-		xmlhttp.onreadystatechange = function(){
+		xmlhttp.onreadystatechange = function () {
 			if (xmlhttp.readyState == '4' && xmlhttp.status == '200') {
 
 			}
@@ -78,25 +73,38 @@ $(function(){
 
 		parameters = 'symptom=' + symptom;
 
-		xmlhttp.open('POST','new_symptom.php', true);
-		xmlhttp.setRequestHeader('Content-type','application/x-www-form-urlencoded');
+		xmlhttp.open('POST', 'new_symptom.php', true);
+		xmlhttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
 		xmlhttp.send(parameters);
 	});
 
-	$('#yes').on('click', function(){
-		$('#yes').addClass( "selected-choice" ).removeClass("btn-choice");
+	$('#yes').on('click', function () {
+		$('#yes').addClass("selected-choice").removeClass("btn-choice");
 		$('#no').removeClass("selected-choice").addClass("btn-choice");
 	});
 
-	$('#no').on('click', function(){
-		$('#no').addClass( "selected-choice" ).removeClass("btn-choice");
+	$('#no').on('click', function () {
+		$('#no').addClass("selected-choice").removeClass("btn-choice");
 		$('#yes').removeClass("selected-choice").addClass("btn-choice");
 	});
 
-	$('#next').on('click', function(){
+	$('#next').on('click', function () {
 		count = $('#count').attr('value');
-		if(point == (count - 1)){
-			if($('#yes').hasClass('selected-choice')){
+		if (count = 11) {
+			ailments.push('malaria');
+		}
+		if (count = 12) {
+			ailments.push('cholera');
+		}
+		if (count = 13) {
+			ailments.push('typhoid');
+		}
+		if (count = 14) {
+			ailments.push('yellow fever');
+		}
+
+		if (point == (count - 1)) {
+			if ($('#yes').hasClass('selected-choice')) {
 				++diagnosis_score;
 			}
 
@@ -104,13 +112,13 @@ $(function(){
 			$('#no').removeClass("selected-choice").addClass("btn-choice");
 
 			++point;
-			$('#yes').addClass( "hide" ).removeClass( "show" );
-			$('#no').addClass( "hide" ).removeClass( "show" );
-			$('#next').addClass( "hide" ).removeClass( "show" );
+			$('#yes').addClass("hide").removeClass("show");
+			$('#no').addClass("hide").removeClass("show");
+			$('#next').addClass("hide").removeClass("show");
 			$('#symptoms-wrapper').fadeOut(0);
 			$('#btn-result').addClass("show").removeClass("hide");
-		} else{
-			if($('#yes').hasClass('selected-choice')){
+		} else {
+			if ($('#yes').hasClass('selected-choice')) {
 				++diagnosis_score;
 			}
 
@@ -121,43 +129,45 @@ $(function(){
 			$('#ul-symptoms').children().fadeOut(0).addClass("hide");
 			$('#ul-symptoms').children().eq(point).fadeIn(800).siblings().addClass("hide");
 		}
-		
+
 	});
 
-	$('#btn-result').on('click', function(){
+	$('#btn-result').on('click', function () {
 		diagnosis_score = parseInt(diagnosis_score * 100 / count);
 		var result_string = "";
 		if (diagnosis_score > 69) {
-			result_string = "You've been diagnosed with chronic malaria. Seek immediate medical attention";
+			result_string = `You've been diagnosed with chronic ${ailment.map(val => { return val + ',' })} Seek immediate medical attention`;
 		} else if (diagnosis_score > 49 && diagnosis_score < 70) {
-			result_string = "You've been diagnosed with malaria. Seek immediate medical attention";
+			result_string = `You've been diagnosed with ${ailment.map(val => { return val + ',' })} Seek immediate medical attention`;
 		} else if (diagnosis_score > 19 && diagnosis_score < 50) {
-			result_string = "You've been diagnosed with slight malaria. Seek immediate medical attention";
-		} else if (diagnosis_score < 20){
-			result_string = "Congratulations!!! you are maleria free";
+			result_string = `You've been diagnosed with slight ${ailment.map(val => { return val + ',' })} Seek immediate medical attention`;
+		} else if (diagnosis_score < 20) {
+			result_string = "Congratulations!!! you are totally fine";
 		}
 		$('#btn-result').addClass("hide").removeClass("show");
 		$('#div-result').addClass("show").removeClass("hide");
 		$('#p-result').html(result_string);
+
+		ailments = [];
 	});
 
-	$('.yes').on('click', function(){
+	$('.yes').on('click', function () {
 		$('.yes').addClass("selected");
 		$('.no').removeClass("selected");
 	});
-	$('.no').on('click', function(){
+	$('.no').on('click', function () {
 		$('.no').addClass("selected");
 		$('.yes').removeClass("selected");
 	});
 
-	$('#span-signin').on('click', function(){
+	$('#span-signin').on('click', function () {
 		$('#div-signin').removeClass("hide").addClass('show').siblings().addClass("hide");
 		$('#a-home').removeClass("hide").addClass('show');
 	});
-	$('#submit').on('click', function(){
+	$('#submit').on('click', function () {
 		$('#span-signin').removeClass("show").addClass('hide').siblings().addClass("hide");
 	});
-	$('#add-symptom').on('click', function(){
+	$('#add-symptom').on('click', function () {
 		$('#div-add-symptom').removeClass("hide").addClass('show').siblings().addClass("hide");
 		$('#a-home').removeClass("hide").addClass('show');
 	});
